@@ -11,6 +11,8 @@ namespace ECommerceParser.Model.Common
         public readonly Category Parent;
         public static Category Root { get; } = new Category();
         public string Name { get; set; }
+        private static Lazy<CategoryBuilder> _builder = new Lazy<CategoryBuilder>(() => new CategoryBuilder());
+        public static CategoryBuilder Builder => _builder.Value;
 
         private Category()
         {

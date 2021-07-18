@@ -80,13 +80,14 @@
     <Compile Include="Model\Artb2b\ImportFile.cs" />
     <Compile Include="Model\Common\Categories.cs" />
     <Compile Include="Model\Common\Category.cs" />
+    <Compile Include="Model\Common\CategoryBuilder.cs" />
     <Compile Include="Model\Prestashop\Attribute.cs" />
     <Compile Include="Model\Prestashop\Attributes.cs" />
     <Compile Include="Model\Prestashop\AttributeValue.cs" />
     <Compile Include="Model\Prestashop\Product.cs" />
     <Compile Include="Parsers\Artb2b\CsvParser.cs" />
     <Compile Include="Parsers\Common\GenericParser.cs" />
-    <Compile Include="Tests\CategoryTest.cs" />
+    <Compile Include="Tests\CategoriesTest.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
