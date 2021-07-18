@@ -73,20 +73,24 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\MainWindowController.cs" />
+    <Compile Include="Helpers\Enums\Language.cs" />
     <Compile Include="Helpers\Enums\Prestashop\AttributeType.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\Translator.cs" />
-    <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Model\Common\GenericProduct.cs" />
     <Compile Include="Model\Artb2b\ImportFile.cs" />
     <Compile Include="Model\Common\Categories.cs" />
     <Compile Include="Model\Common\Category.cs" />
     <Compile Include="Model\Common\CategoryBuilder.cs" />
+    <Compile Include="Model\Common\Tag.cs" />
     <Compile Include="Model\Prestashop\Attribute.cs" />
     <Compile Include="Model\Prestashop\Attributes.cs" />
     <Compile Include="Model\Prestashop\AttributeValue.cs" />
     <Compile Include="Model\Prestashop\Product.cs" />
+    <Compile Include="Model\Prestashop\ProductVariant.cs" />
     <Compile Include="Parsers\Artb2b\CsvParser.cs" />
     <Compile Include="Parsers\Common\GenericParser.cs" />
+    <Compile Include="Tests\AttributesTest.cs" />
     <Compile Include="Tests\CategoriesTest.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -120,7 +124,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

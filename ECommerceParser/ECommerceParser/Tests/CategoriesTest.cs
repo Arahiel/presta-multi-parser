@@ -19,7 +19,7 @@ namespace ECommerceParser.Tests
 
             var output = childCategory.ToString();
 
-            Assert.That(output, Is.EqualTo("Painted picture/Flowers"));
+            Assert.That(output, Is.EqualTo($"{parentCategory.Name}/{childCategory.Name}"));
         }
 
         [Test]
@@ -27,12 +27,15 @@ namespace ECommerceParser.Tests
         {
             var cb = Category.Builder;
 
-            var output = cb.AddCategory("Painted picture")
-                .AddCategory("Flowers")
+            const string parentCategoryName = "Painted picture";
+            const string childCategoryName = "Flowers";
+
+            var output = cb.AddCategory(parentCategoryName)
+                .AddCategory(childCategoryName)
                 .Build()
                 .ToString();
 
-            Assert.That(output, Is.EqualTo("Painted picture/Flowers"));
+            Assert.That(output, Is.EqualTo($"{parentCategoryName}/{childCategoryName}"));
         }
     }
 }

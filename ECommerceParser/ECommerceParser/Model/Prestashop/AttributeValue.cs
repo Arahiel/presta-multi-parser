@@ -2,9 +2,9 @@
 {
     public class AttributeValue
     {
-        public string Position { get; set; }
+        public uint Position { get; set; }
         public string Value { get; set; }
-        public AttributeValue(string position, string value)
+        public AttributeValue(uint position, string value)
         {
             Position = position;
             Value = value;
