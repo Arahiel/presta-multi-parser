@@ -29,5 +29,6 @@
         }
 
         public Category Build() => actual;
+        public void Clear() => actual = null;
     }
 }

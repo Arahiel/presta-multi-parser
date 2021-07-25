@@ -9,5 +9,8 @@ namespace ECommerceParser.Helpers.Enums
     public enum Language
     {
         //TODO: Fill languages for Translate NuGet/library
+        Polish,
+        English,
+        Dutch
     }
 }

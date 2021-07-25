@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ECommerceParser.Model.Common
 {
-    public class GenericProduct
+    public abstract class GenericProduct
     {
-        string Name { get; set; }
-        string Description { get; set; }
-        List<Category> Categories { get; set; }
-        List<string> ImageUrls { get; set; }
-        List<Tag> Tags { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<Category> Categories { get; set; }
+        public List<string> ImageUrls { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

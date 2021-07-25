@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ECommerceParser.Helpers.Enums;
+using EuropeanCentralBank.ExchangeRates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace ECommerceParser.Parsers.Common
 {
-    public abstract class GenericParser<TImportFile, TProduct>
+    public abstract class GenericParser<TImportFile, TProductFile, TProductVariantsFile>
     {
-        public abstract TProduct Load(TImportFile filePath);
+        protected abstract Currencies Currency { get; }
+        public abstract Task<(TProductFile productFile, TProductVariantsFile productVariantsFile)> Parse(TImportFile importObject, Language fileLanguage);
     }
 }

@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ECommerceParser.Properties
-{
-
-
+namespace ECommerceParser.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,52 +19,74 @@ namespace ECommerceParser.Properties
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    internal class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ECommerceParser.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to id;code;name;description;price_with_tax;tax;purchase_price;categories;variants;features;images;tags
+        ///262889;PP-RM4778A_5H;&quot;Maki w świetle księżyca&quot;;;460.00;23;284.2277;&quot;Obraz malowany/Kwiaty|Obraz malowany/Rośliny|Obraz malowany/Reprodukcje malarstwa&quot;;;&quot;name=Układ;value=5H|name=Szerokość [cm];value=150|name=Wysokość [cm];value=105|name=Źródło;value=4778|name=Liczba elementów;value=5&quot;;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg|https://artb2b.pl/plugin/a [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string artb2b_20210717_103921 {
+            get {
+                return ResourceManager.GetString("artb2b_20210717_103921", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product ID;Attributes;Values;Reference;Impact on price;Quantity;Default;Image URLs (x,y,z...)
+        ///4778;Układ:select:0;5H:0;PP-RM4778A_5H;140,00;0;0;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg,https://artb2b.pl/plugin/art_gal/image/room/1588/room-1588-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/room/1586/room-1586-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/frameset/frameset-31.png?size=1600&amp;ratio=1 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string artb2b_20210717_103921_combinations {
+            get {
+                return ResourceManager.GetString("artb2b_20210717_103921_combinations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id;Reference;Name;Description;Price tax included;Tax rule id;Cost price;Categories;Images;Tags
+        ///4778;PP-RM4778A_5H;Maki w świetle księżyca;;460.00;1;284.2277;Obraz malowany/Kwiaty,Obraz malowany/Rośliny,Obraz malowany/Reprodukcje malarstwa;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg,https://artb2b.pl/plugin/art_gal/image/room/1588/room-1588-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/room/1586/room-1586-RM4778A_5H.jpg?size= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string artb2b_20210717_103921_products {
+            get {
+                return ResourceManager.GetString("artb2b_20210717_103921_products", resourceCulture);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using ECommerceParser.Helpers.Enums;
+using ECommerceParser.Model.Artb2b;
 using ECommerceParser.Model.Common;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace ECommerceParser.Helpers
 {
     public static class Translator
     {
-        public static string Translate(this GenericProduct product, Language sourceLanguage, Language destinationLanguage)
+        public static ExportedProductsFile Translate(this ExportedProductsFile inputFile, Language sourceLanguage, Language destinationLanguage)
         {
             throw new NotImplementedException();
         }
