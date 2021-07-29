@@ -22,7 +22,7 @@ namespace ECommerceParser.Tests
             var exportedProductVariantsFileContents = Resources.artb2b_20210717_103921_combinations;
 
             var parser = new ProductParser(EuropeanCentralBank.ExchangeRates.Currencies.Euro);
-            var (outputProductFileContents, outputProductVariantsFileContents) = await parser.Parse(importedFile, Helpers.Enums.Language.Polish);
+            var (outputProductFileContents, outputProductVariantsFileContents) = await parser.ParseProducts(importedFile, Helpers.Enums.Language.Polish);
 
             Assert.That(outputProductFileContents.ToCsv(), Is.EqualTo(exportedProductFileContents));
             //Assert.That(outputProductVariantsFileContents, Is.EqualTo(exportedProductVariantsFileContents));

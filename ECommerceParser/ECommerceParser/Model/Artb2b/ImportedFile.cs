@@ -25,7 +25,6 @@ namespace ECommerceParser.Model.Artb2b
         public static ImportedFile Load(string filePath, Currencies importFileCurrency) =>
             Load(File.ReadAllLines(filePath).Skip(1), importFileCurrency);
 
-        //TODO: ERROR: Zle parsuje przez sredniki w features!
         public static ImportedFile Load(IEnumerable<string> contentLines, Currencies importFileCurrency)
         {
             var products = new List<ImportedProduct>();
@@ -38,8 +37,8 @@ namespace ECommerceParser.Model.Artb2b
                 }
 
                 var regex = new Regex("(\".*?\")");
-                var l = regex.Replace(line, x => x.Value.Replace(';', '|'));
-                var values = l.Split(';').Select(x => x.Trim('\"')).ToArray();
+                var sanitizedLine = regex.Replace(line, x => x.Value.Replace(';', '|'));
+                var values = sanitizedLine.Split(';').Select(x => x.Trim('\"')).ToArray();
 
                 products.Add(new ImportedProduct(
                     int.Parse(values[(int)ImportHeaders.Id]),

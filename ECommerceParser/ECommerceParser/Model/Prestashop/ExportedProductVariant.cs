@@ -14,8 +14,9 @@ namespace ECommerceParser.Model.Prestashop
         public double ImpactOnPrice { get; set; }
         public int Quantity { get; set; }
         public bool Default { get; set; }
+        public List<string> ImageUrls { get; set; }
 
-        public ExportedProductVariant(int id, Attributes attributes, string reference, double impactOnPrice, int quantity, bool _default)
+        public ExportedProductVariant(int id, Attributes attributes, string reference, double impactOnPrice, int quantity, bool _default, List<string> imageUrls)
         {
             Id = id;
             Attributes = attributes;
@@ -23,6 +24,7 @@ namespace ECommerceParser.Model.Prestashop
             ImpactOnPrice = impactOnPrice;
             Quantity = quantity;
             Default = _default;
+            ImageUrls = imageUrls;
         }
     }
 }

@@ -11,6 +11,6 @@ namespace ECommerceParser.Parsers.Common
     public abstract class GenericParser<TImportFile, TProductFile, TProductVariantsFile>
     {
         protected abstract Currencies Currency { get; }
-        public abstract Task<(TProductFile productFile, TProductVariantsFile productVariantsFile)> Parse(TImportFile importObject, Language fileLanguage);
+        public abstract Task<(TProductFile productFile, TProductVariantsFile productVariantsFile)> ParseProducts(TImportFile importObject, Language fileLanguage);
     }
 }
