@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerceParser.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,9 @@ namespace ECommerceParser.Model.Prestashop
         public double ImpactOnPrice { get; set; }
         public int Quantity { get; set; }
         public bool Default { get; set; }
-        public List<string> ImageUrls { get; set; }
+        public ImageUrls ImageUrls { get; set; }
 
-        public ExportedProductVariant(int id, Attributes attributes, string reference, double impactOnPrice, int quantity, bool _default, List<string> imageUrls)
+        public ExportedProductVariant(int id, Attributes attributes, string reference, double impactOnPrice, int quantity, bool _default, ImageUrls imageUrls)
         {
             Id = id;
             Attributes = attributes;

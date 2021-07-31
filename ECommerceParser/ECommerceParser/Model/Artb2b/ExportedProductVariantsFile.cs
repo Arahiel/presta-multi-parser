@@ -13,17 +13,41 @@ namespace ECommerceParser.Model.Artb2b
     public class ExportedProductVariantsFile : ICsvSerializable
     {
         public List<ExportedProductVariant> ProductVariants;
-        public Language FileLanguage;
+        public string FileLanguageCode;
 
-        public ExportedProductVariantsFile(List<ExportedProductVariant> productVariants, Language fileLanguage)
+        public ExportedProductVariantsFile(List<ExportedProductVariant> productVariants, string fileLanguageCode)
         {
             ProductVariants = productVariants;
-            FileLanguage = fileLanguage;
+            FileLanguageCode = fileLanguageCode;
         }
 
         public string ToCsv()
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+
+            AppendHeaders(sb);
+            AppendProductVariants(sb);
+
+            return sb.ToString();
+        }
+
+        private void AppendHeaders(StringBuilder sb)
+        {
+            sb.Append("Product ID;Attributes;Values;Reference;Impact on price;Quantity;Default;Image URLs (x,y,z...)\r\n");
+        }
+        private void AppendProductVariants(StringBuilder sb)
+        {
+            foreach (var productVariant in ProductVariants)
+            {
+                sb.Append($"{productVariant.Id};" +
+                    $"{productVariant.Attributes};" +
+                    $"{productVariant.Attributes.Values()};" +
+                    $"{productVariant.Reference};" +
+                    $"{productVariant.ImpactOnPrice};" +
+                    $"{productVariant.Quantity};" +
+                    $"{(productVariant.Default ? "1" : "0")};" +
+                    $"{string.Join(",", productVariant.ImageUrls)}\r\n");
+            }
         }
     }
 }

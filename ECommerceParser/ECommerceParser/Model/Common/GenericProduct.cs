@@ -10,8 +10,8 @@ namespace ECommerceParser.Model.Common
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Category> Categories { get; set; }
-        public List<string> ImageUrls { get; set; }
-        public List<Tag> Tags { get; set; }
+        public Categories Categories { get; set; }
+        public ImageUrls ImageUrls { get; set; }
+        public Tags Tags { get; set; }
     }
 }

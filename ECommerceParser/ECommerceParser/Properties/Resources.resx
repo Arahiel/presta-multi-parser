@@ -121,10 +121,10 @@
   <data name="artb2b_20210717_103921" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\artb2b-20210717-103921.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="artb2b_20210717_103921_combinations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="artb2b_20210717_103921_combinations_en" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\artb2b-20210717-103921-combinations.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
-  <data name="artb2b_20210717_103921_products" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="artb2b_20210717_103921_products_en" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\artb2b-20210717-103921-products.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -29,14 +29,13 @@ namespace ECommerceParser.Parsers.Artb2b
             _currency = currency;
         }
 
-        public override async Task<(ExportedProductsFile productFile, ExportedProductVariantsFile productVariantsFile)> ParseProducts(ImportedFile importObject, Language fileLanguage)
+        public override async Task<(ExportedProductsFile productFile, ExportedProductVariantsFile productVariantsFile)> ParseProducts(ImportedFile importObject, string sourceLanguageCode)
         {
             var products = await GetExportedProducts(importObject);
             var productsWithVariants = GetExportedProductVariants(products.OrderBy(x => x.Id));
 
-            //TODO: Translate to all needed languages here?
-            return (new ExportedProductsFile(productsWithVariants, fileLanguage),
-                new ExportedProductVariantsFile(productsWithVariants.SelectMany(x => x.Variants).ToList(), fileLanguage));
+            return (new ExportedProductsFile(productsWithVariants, sourceLanguageCode),
+                new ExportedProductVariantsFile(productsWithVariants.SelectMany(x => x.Variants).ToList(), sourceLanguageCode));
         }
 
         private List<ExportedProduct> GetExportedProductVariants(IEnumerable<ExportedProduct> products)
@@ -59,12 +58,13 @@ namespace ECommerceParser.Parsers.Artb2b
                     impactOnPrice = product.PriceTaxIncluded - defaultPrice;
                 }
 
-                const string layoutAttributeName = "Układ";
+                const string inputLayoutAttributeName = "Układ";
+                const string outputLayoutAttributeName = "Layout";
                 const uint layoutPosition = 0;
 
                 var attributes = new Attributes()
                 {
-                    new Model.Prestashop.Attribute(layoutAttributeName, AttributeType.Select, layoutPosition, new AttributeValue(layoutPosition, product.Features[layoutAttributeName]))
+                    new Model.Prestashop.Attribute(outputLayoutAttributeName, AttributeType.Select, layoutPosition, new AttributeValue(layoutPosition, product.Features[inputLayoutAttributeName]))
                 };
 
                 const int quantity = 0; // Add empty stock by default
@@ -120,7 +120,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 }
 
                 //Images
-                var imageUrls = importedProduct.Images.Split('|').ToList();
+                var imageUrls = new ImageUrls(importedProduct.Images.Split('|'));
 
                 //Prices in Euro (default and only one for our shop)
                 var exchange = new ExchangeRatesCalculator(new ExchangeRatesSource());
@@ -143,7 +143,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 product.Description = importedProduct.Description;
                 product.Categories = categories;
                 product.ImageUrls = imageUrls;
-                product.Tags = tags.Select(x => new Tag(x)).ToList();
+                product.Tags = new Tags(tags.Select(x => new Tag(x)));
 
                 products.Add(product);
             }

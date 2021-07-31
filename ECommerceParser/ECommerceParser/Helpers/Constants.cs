@@ -21,5 +21,10 @@ namespace ECommerceParser.Helpers.Wallpics
         /// Margin per product
         /// </summary>
         public static readonly double Margin = 0.5;
+
+        /// <summary>
+        /// Mail used for a mymemory.translated.net translator. Used to extend translation limit from 1000 (anonymous) to 10000 words/day.
+        /// </summary>
+        public static string TranslatorMail = "a@b.store";
     }
 }

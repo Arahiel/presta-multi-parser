@@ -72,21 +72,22 @@ namespace ECommerceParser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Product ID;Attributes;Values;Reference;Impact on price;Quantity;Default;Image URLs (x,y,z...)
-        ///4778;Układ:select:0;5H:0;PP-RM4778A_5H;140,00;0;0;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg,https://artb2b.pl/plugin/art_gal/image/room/1588/room-1588-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/room/1586/room-1586-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/frameset/frameset-31.png?size=1600&amp;ratio=1 [rest of string was truncated]&quot;;.
+        ///4778;Layout:select:0;5H:0;PP-RM4778A_5H;0;0;1;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg,https://artb2b.pl/plugin/art_gal/image/room/1588/room-1588-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/room/1586/room-1586-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/frameset/frameset-31.png?size=1600&amp;ratio=11
+        ///4 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string artb2b_20210717_103921_combinations {
+        internal static string artb2b_20210717_103921_combinations_en {
             get {
-                return ResourceManager.GetString("artb2b_20210717_103921_combinations", resourceCulture);
+                return ResourceManager.GetString("artb2b_20210717_103921_combinations_en", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Id;Reference;Name;Description;Price tax included;Tax rule id;Cost price;Categories;Images;Tags
-        ///4778;PP-RM4778A_5H;Maki w świetle księżyca;;460.00;1;284.2277;Obraz malowany/Kwiaty,Obraz malowany/Rośliny,Obraz malowany/Reprodukcje malarstwa;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg,https://artb2b.pl/plugin/art_gal/image/room/1588/room-1588-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/room/1586/room-1586-RM4778A_5H.jpg?size= [rest of string was truncated]&quot;;.
+        ///4778;PP-RM4778A_5H;Poppies in the moonlight;;202;1;62,28;Painted picture/Flowers,Painted picture/Plants,Painted picture/Painting reproductions;https://artb2b.pl/plugin/art_gal/image/m/0/0.975/0/0/0/0/1/0/2/2/1600/11/miniature-1-RM4778A_5H.jpg,https://artb2b.pl/plugin/art_gal/image/room/1588/room-1588-RM4778A_5H.jpg?size=1600&amp;ratio=11,https://artb2b.pl/plugin/art_gal/image/room/1586/room-1586-RM4778A_5H.jpg?size=1 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string artb2b_20210717_103921_products {
+        internal static string artb2b_20210717_103921_products_en {
             get {
-                return ResourceManager.GetString("artb2b_20210717_103921_products", resourceCulture);
+                return ResourceManager.GetString("artb2b_20210717_103921_products_en", resourceCulture);
             }
         }
     }

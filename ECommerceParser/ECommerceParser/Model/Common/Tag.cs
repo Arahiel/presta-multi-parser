@@ -12,7 +12,10 @@ namespace ECommerceParser.Model.Common
 
         public Tag(string name)
         {
-            Name = name;
+            var input = name.Trim();
+            var firstUpperLetter = input[0].ToString().ToUpper();
+            var rest = input.Substring(1);
+            Name = firstUpperLetter + rest;
         }
     }
 }

@@ -24,6 +24,22 @@ namespace ECommerceParser.Model.Common
             Name = name;
         }
 
+        public static Category FromString(string categoryString)
+        {
+            var cb = new CategoryBuilder();
+
+            foreach(var categoryName in categoryString.Split('/'))
+            {
+                var input = categoryName.Trim();
+                var firstUpperLetter = input[0].ToString().ToUpper();
+                var rest = input.Substring(1);
+
+                cb.AddCategory(firstUpperLetter + rest);
+            }
+
+            return cb.Build();
+        }
+
         public override string ToString()
         {
             var parentName = Parent != null ? (Parent.Name != null ? Parent.ToString() + "/" : string.Empty) : string.Empty;

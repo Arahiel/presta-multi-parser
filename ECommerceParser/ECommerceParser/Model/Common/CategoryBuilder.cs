@@ -29,6 +29,11 @@
         }
 
         public Category Build() => actual;
-        public void Clear() => actual = null;
+
+        public CategoryBuilder Clear()
+        {
+            actual = null;
+            return this;
+        }
     }
 }
