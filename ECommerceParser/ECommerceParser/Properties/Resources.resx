@@ -127,4 +127,7 @@
   <data name="artb2b_20210717_103921_products_en" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\artb2b-20210717-103921-products.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="Translations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Translations.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

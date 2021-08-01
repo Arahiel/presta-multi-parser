@@ -90,5 +90,15 @@ namespace ECommerceParser.Properties {
                 return ResourceManager.GetString("artb2b_20210717_103921_products_en", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Translations {
+            get {
+                object obj = ResourceManager.GetObject("Translations", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

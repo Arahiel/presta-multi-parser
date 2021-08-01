@@ -144,7 +144,8 @@
     <Compile Include="Helpers\Enums\Artb2b\ImportHeaders.cs" />
     <Compile Include="Helpers\Enums\Prestashop\AttributeType.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\MyMemoryJson.cs" />
+    <Compile Include="Helpers\MyMemoryJsonHandler.cs" />
+    <Compile Include="Helpers\TranslationJsonHandler.cs" />
     <Compile Include="Helpers\Translator.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Interfaces\ICsvSerializable.cs" />
@@ -191,6 +192,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -200,6 +202,9 @@
     <None Include="Resources\artb2b-20210717-103921-combinations.csv" />
     <None Include="Resources\artb2b-20210717-103921-products.csv" />
     <None Include="Resources\artb2b-20210717-103921.csv" />
+    <None Include="Resources\Translations.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,0 +1,19 @@
+{
+  "cache": 
+  [
+    {
+      "id": 0,
+      "inputText": "Obraz malowany",
+      "sourceLanguage": "pl",
+      "outputText": "Painted picture",
+      "destinationLanguage": "en"
+    },
+    {
+      "id": 1,
+      "inputText": "Maki",
+      "sourceLanguage": "pl",
+      "outputText": "Poppies",
+      "destinationLanguage": "en"
+    }
+  ]
+}

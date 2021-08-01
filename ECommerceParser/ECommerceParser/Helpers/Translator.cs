@@ -4,9 +4,11 @@ using ECommerceParser.Model.Artb2b;
 using ECommerceParser.Model.Common;
 using ECommerceParser.Model.Prestashop;
 using Google.Cloud.Translation.V2;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -35,7 +37,7 @@ namespace ECommerceParser.Helpers
             return new ExportedProductsFile(await outputProducts.ToListAsync(), destinationLanguageCode);
         }
 
-        public static async IAsyncEnumerable<ExportedProduct> TranslateProducts(this HttpClient client,
+        private static async IAsyncEnumerable<ExportedProduct> TranslateProducts(this HttpClient client,
                                                                                  List<ExportedProduct> inputProducts,
                                                                                  string sourceLanguageCode,
                                                                                  string destinationLanguageCode)
@@ -69,7 +71,7 @@ namespace ECommerceParser.Helpers
             return outputProduct;
         }
 
-        public static async IAsyncEnumerable<Category> TranslateSeparateCategories(HttpClient client, ExportedProduct inputProduct, string sourceLanguageCode, string destinationLanguageCode)
+        private static async IAsyncEnumerable<Category> TranslateSeparateCategories(HttpClient client, ExportedProduct inputProduct, string sourceLanguageCode, string destinationLanguageCode)
         {
             foreach (var category in inputProduct.Categories)
             {
@@ -98,6 +100,13 @@ namespace ECommerceParser.Helpers
                                                          string translatorMail = "")
         {
             if (inputText.Equals(string.Empty)) return string.Empty;
+            if (sourceLanguageCode == destinationLanguageCode) return inputText;
+            var cachedTranslation = GetCachedTranslation(inputText, sourceLanguageCode, destinationLanguageCode);
+            if (cachedTranslation != null)
+            {
+                return cachedTranslation;
+            }
+
 
             var request = new HttpRequestMessage
             {
@@ -111,20 +120,61 @@ namespace ECommerceParser.Helpers
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                var myMemoryJson = TopLevel.FromJson(body);
+                var myMemoryJson = MyMemory.FromJson(body);
                 try
                 {
                     translatedText = myMemoryJson.Matches.First(x => x.Reference?
                     .Equals("Machine Translation provided by Google, Microsoft, Worldlingo or MyMemory customized engine.")
                     ?? false).Translation;
                 }
-                catch(InvalidOperationException)
+                catch (InvalidOperationException)
                 {
                     translatedText = myMemoryJson.Matches.First().Translation;
                 }
             }
 
+            CacheTranslation(inputText, sourceLanguageCode, translatedText, destinationLanguageCode);
             return translatedText;
+        }
+
+        private static Cache CacheTranslation(string inputText, string sourceLanguageCode, string translatedText, string destinationLanguageCode)
+        {
+            var translationFilePath = GetTranslationsFilePath();
+            var translationFileContents = File.ReadAllBytes(translationFilePath);
+            var translation = Translation.FromJson(Encoding.UTF8.GetString(translationFileContents));
+            var nextId = translation.Cache.Last().Id + 1;
+            var newCachedText = new Cache()
+            {
+                Id = nextId,
+                InputText = inputText,
+                SourceLanguage = sourceLanguageCode,
+                OutputText = translatedText,
+                DestinationLanguage = destinationLanguageCode
+            };
+
+            translation.Cache = translation.Cache.Append(newCachedText).ToArray();
+
+            var serializedTranslation = Translation.ToJson(translation);
+            File.WriteAllBytes(translationFilePath, Encoding.UTF8.GetBytes(serializedTranslation));
+            return newCachedText;
+        }
+
+        private static string GetCachedTranslation(string inputText, string sourceLanguageCode, string destinationLanguageCode)
+        {
+            var translationFilePath = GetTranslationsFilePath();
+            var translationFileContents = File.ReadAllBytes(translationFilePath);
+            var translation = Translation.FromJson(Encoding.UTF8.GetString(translationFileContents));
+            var cachedTranslation = translation.Cache.SingleOrDefault(x => 
+            x.InputText.Equals(inputText) && 
+            x.SourceLanguage.Equals(sourceLanguageCode) && 
+            x.DestinationLanguage.Equals(destinationLanguageCode));
+
+            return cachedTranslation?.OutputText;
+        }
+
+        private static string GetTranslationsFilePath()
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", nameof(Properties.Resources.Translations) + ".json");
         }
 
         private static Uri GetTranslationUri(string inputText, string sourceLanguageCode, string destinationLanguageCode, string translatorMail = "")

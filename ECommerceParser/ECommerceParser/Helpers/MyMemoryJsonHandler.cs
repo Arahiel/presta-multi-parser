@@ -8,7 +8,7 @@ namespace ECommerceParser.Helpers
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public partial class TopLevel
+    public partial class MyMemory
     {
         [JsonProperty("responseData")]
         public ResponseData ResponseData { get; set; }
@@ -104,14 +104,14 @@ namespace ECommerceParser.Helpers
         public static implicit operator Subject(string String) => new Subject { String = String };
     }
 
-    public partial class TopLevel
+    public partial class MyMemory
     {
-        public static TopLevel FromJson(string json) => JsonConvert.DeserializeObject<TopLevel>(json, Converter.Settings);
+        public static MyMemory FromJson(string json) => JsonConvert.DeserializeObject<MyMemory>(json, Converter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this TopLevel self) => JsonConvert.SerializeObject(self, Converter.Settings);
+        public static string ToJson(this MyMemory self) => JsonConvert.SerializeObject(self, Converter.Settings);
     }
 
     internal static class Converter
