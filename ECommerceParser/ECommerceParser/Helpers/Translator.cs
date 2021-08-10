@@ -27,13 +27,12 @@ namespace ECommerceParser.Helpers
         /// <param name="destinationLanguageCode"></param>
         /// <returns></returns>
         public static async Task<ExportedProductsFile> Translate(this ExportedProductsFile inputFile,
-                                                                 string sourceLanguageCode,
                                                                  string destinationLanguageCode)
         {
-            if (sourceLanguageCode == destinationLanguageCode) return inputFile;
+            if (inputFile.FileLanguageCode == destinationLanguageCode) return inputFile;
 
             var client = new HttpClient();
-            var outputProducts = client.TranslateProducts(inputFile.Products, sourceLanguageCode, destinationLanguageCode);
+            var outputProducts = client.TranslateProducts(inputFile.Products, inputFile.FileLanguageCode, destinationLanguageCode);
             return new ExportedProductsFile(await outputProducts.ToListAsync(), destinationLanguageCode);
         }
 

@@ -26,7 +26,7 @@ namespace ECommerceParser.Tests
             var parser = new ProductParser(EuropeanCentralBank.ExchangeRates.Currencies.Euro);
             var (outputProductFile, outputProductVariantsFile) = await parser.ParseProducts(importedFile, LanguageCodes.Polish);
 
-            var translatedProductFile = await Translator.Translate(outputProductFile, LanguageCodes.Polish, LanguageCodes.English);
+            var translatedProductFile = await Translator.Translate(outputProductFile, LanguageCodes.English);
 
             string productFileCsvString = translatedProductFile.ToCsv();
             string productVariantsFileCsvString = outputProductVariantsFile.ToCsv();
