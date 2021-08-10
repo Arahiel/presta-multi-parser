@@ -1,4 +1,4 @@
-﻿using ECommerceParser.Helpers.Enums;
+﻿using ECommerceParser.Helpers.Enums.Artb2b;
 using EuropeanCentralBank.ExchangeRates;
 using System;
 using System.Collections.Generic;

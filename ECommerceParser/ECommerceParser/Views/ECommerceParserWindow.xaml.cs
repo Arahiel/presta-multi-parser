@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ECommerceParser
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ECommerceParserWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ECommerceParserWindow : Window
     {
-        public MainWindow()
+        public ECommerceParserWindow()
         {
             InitializeComponent();
         }

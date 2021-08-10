@@ -132,7 +132,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\MainWindow.xaml">
+    <Page Include="Views\ECommerceParserWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -140,11 +140,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controllers\MainWindowController.cs" />
+    <Compile Include="Model\Common\ImageUrl.cs" />
+    <Compile Include="ViewModels\ECommerceParserViewModel.cs" />
     <Compile Include="Helpers\Enums\Artb2b\ImportHeaders.cs" />
     <Compile Include="Helpers\Enums\Prestashop\AttributeType.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\MyMemoryJsonHandler.cs" />
+    <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\TranslationJsonHandler.cs" />
     <Compile Include="Helpers\Translator.cs" />
     <Compile Include="Helpers\Constants.cs" />
@@ -170,8 +172,8 @@
     <Compile Include="Tests\AttributesTest.cs" />
     <Compile Include="Tests\CategoriesTest.cs" />
     <Compile Include="Tests\ParserTests.cs" />
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Views\ECommerceParserWindow.xaml.cs">
+      <DependentUpon>ECommerceParserWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

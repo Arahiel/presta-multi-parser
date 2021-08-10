@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace ECommerceParser.Model.Common
 {
-    public class ImageUrls : List<string>
+    public class ImageUrls : List<ImageUrl>
     {
-        public ImageUrls(IEnumerable<string> urls) : base(urls)
+        public ImageUrls(IEnumerable<ImageUrl> urls) : base(urls)
+        {
+        }
+
+        public ImageUrls(IEnumerable<string> urls) : base(urls.Select(x => new ImageUrl(x)))
         {
         }
 

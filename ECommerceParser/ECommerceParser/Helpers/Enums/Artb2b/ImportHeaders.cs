@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceParser.Helpers.Enums
+namespace ECommerceParser.Helpers.Enums.Artb2b
 {
     public enum ImportHeaders
     {
