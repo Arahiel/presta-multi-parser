@@ -4,12 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ECommerceParser.Controllers"
+        xmlns:currencies="clr-namespace:EuropeanCentralBank.ExchangeRates;assembly=EuropeanCentralBank.ExchangeRates"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="E-commerce parser" Height="768" Width="1024" MinWidth="800" MinHeight="450">
-    
+        Title="E-commerce parser" Height="768" Width="1280" MinWidth="1280" MinHeight="450">
+
     <Window.DataContext>
         <local:ECommerceParserViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <ObjectDataProvider  x:Key="currencyData" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="currencies:Currencies"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <!--<ObjectDataProvider  x:Key="languageData" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="currencies:Currencies"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>-->
+    </Window.Resources>
 
     <Grid Name="MainGrid" Margin="0">
         <Grid.Background>
@@ -21,7 +37,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="75px"/>
             <RowDefinition Height="0.9*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
@@ -34,7 +50,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Margin="5 5 5 5" Grid.Row="0" TextWrapping="Wrap"/>
+            <TextBox x:Name="InputTextBox" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Text="{Binding InputFileTextBoxValue, Mode=TwoWay}" Margin="5 5 5 5" Grid.Row="0" TextWrapping="Wrap"/>
         </Grid>
 
         <Grid Name="RightGrid" Grid.Column="1" Grid.Row="1">
@@ -49,6 +65,7 @@
                       Margin="5 5 5 5" 
                       Grid.Row="0" 
                       AutoGenerateColumns="False"
+                      IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" 
                       ItemsSource="{Binding CurrentExportedProducts, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
@@ -102,10 +119,19 @@
             </DataGrid>
         </Grid>
 
-        <Button Command="{Binding ImportFileCommand}" Content="Import file" HorizontalAlignment="Right" Margin="0,9,10,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" FontSize="18"/>
-        <Button Command="{Binding ExportFileCommand}" Content="Export file" HorizontalAlignment="Right" Margin="0,9,10,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" Grid.Column="1" FontSize="18"/>
-        <Button Command="{Binding ParseProductsCommand}" Content="Parse products" HorizontalAlignment="Right" Margin="0,9,140.333,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" Grid.Column="1" FontSize="18"/>
+        <Button Command="{Binding ImportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Import file" Margin="253,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="125"/>
+        <Button Command="{Binding ExportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Export file" HorizontalAlignment="Left" Margin="383,19,0,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" FontSize="18"/>
+        <Button Command="{Binding ParseProductsCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}"  Content="Parse products" Margin="342.333,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" Grid.Column="1" FontSize="18" HorizontalAlignment="Left" Width="125"/>
         <StackPanel x:Name="StatusBar" Margin="0" Grid.Row="2" Background="#FFE5E5E5" Grid.ColumnSpan="2"/>
+        <Label Content="Source currency" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="sourceCurrency" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding Source={StaticResource currencyData}}" SelectedItem="{Binding CurrentSourceCurrency}" HorizontalAlignment="Left" Margin="114,14,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Source language" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="sourceLanguage" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding LanguageCodeList}" SelectedValue="{Binding CurrentSourceLanguageCode, Mode=OneWayToSource}" HorizontalAlignment="Left" Margin="114,44,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Destination language" HorizontalAlignment="Left" Margin="10.333,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <ComboBox x:Name="destinationLanguage" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding LanguageCodeList}" SelectedValue="{Binding CurrentDestinationLanguageCode, Mode=OneWayToSource}" HorizontalAlignment="Left" Margin="10.333,41,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
+        <Label Content="Destination currency" HorizontalAlignment="Left" Margin="166.333,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <ComboBox x:Name="destinationCurrency" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding Source={StaticResource currencyData}}" SelectedItem="{Binding CurrentDestinationCurrency}" HorizontalAlignment="Left" Margin="166.333,41,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
+        <Button Command="{Binding TranslateCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Translate" Margin="472.333,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" Grid.Column="1" FontSize="18" HorizontalAlignment="Left" Width="125"/>
     </Grid>
 
 </Window>

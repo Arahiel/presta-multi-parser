@@ -24,6 +24,10 @@ namespace ECommerceParser.Parsers.Artb2b
         /// </summary>
         protected override Currencies Currency => _currency;
 
+        /// <summary>
+        /// Parameter is the currency to which import prices will be converted. It is output currency in the exported file.
+        /// </summary>
+        /// <param name="currency"></param>
         public ProductParser(Currencies currency)
         {
             _currency = currency;
