@@ -122,7 +122,10 @@
         <Button Command="{Binding ImportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Import file" Margin="253,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="125"/>
         <Button Command="{Binding ExportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Export file" HorizontalAlignment="Left" Margin="383,19,0,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" FontSize="18"/>
         <Button Command="{Binding ParseProductsCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}"  Content="Parse products" Margin="342.333,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" Grid.Column="1" FontSize="18" HorizontalAlignment="Left" Width="125"/>
-        <StackPanel x:Name="StatusBar" Margin="0" Grid.Row="2" Background="#FFE5E5E5" Grid.ColumnSpan="2"/>
+        <StackPanel x:Name="StatusBar" Margin="0" Grid.Row="2" Background="#FFE5E5E5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Label Content="{Binding CurrentStatusBarName}" Width="100" Height="25" VerticalAlignment="Center"/>
+            <ProgressBar x:Name="StatusProgressBar" HorizontalAlignment="Left" Width="400" Height="18.2" Background="#FFC3C3C5" Maximum="{Binding MaxProcessedItemIndex, Mode=TwoWay}" Value="{Binding CurrentProcessedItemIndex, Mode=TwoWay}"/>
+        </StackPanel>
         <Label Content="Source currency" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="sourceCurrency" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding Source={StaticResource currencyData}}" SelectedItem="{Binding CurrentSourceCurrency}" HorizontalAlignment="Left" Margin="114,14,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Content="Source language" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>

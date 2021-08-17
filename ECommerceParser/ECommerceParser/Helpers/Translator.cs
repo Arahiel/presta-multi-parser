@@ -58,7 +58,7 @@ namespace ECommerceParser.Helpers
             outputProduct.ImageUrls = inputProduct.ImageUrls;
             outputProduct.Name = await client.TranslateAsync(inputProduct.Name, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
 
-            //Maximum byte size for translation is 500 bytes, so Description has to have <=250 words
+            //Maximum byte size for translation is 500 bytes, so Description has to have <=250 characters
             outputProduct.Description = await client.TranslateAsync(inputProduct.Description, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
 
             //Translate each category separately for better translation match

@@ -9,6 +9,7 @@ using EuropeanCentralBank.ExchangeRates;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,9 +17,23 @@ using System.Threading.Tasks;
 
 namespace ECommerceParser.Parsers.Artb2b
 {
-    public class ProductParser : GenericParser<ImportedFile, ExportedProductsFile, ExportedProductVariantsFile>
+    public class ProductParser : GenericParser<ImportedFile, ExportedProductsFile, ExportedProductVariantsFile>, INotifyPropertyChanged
     {
+        private int currentParsedFileIndex;
         private Currencies _currency;
+
+        public int CurrentParsedFileIndex
+        {
+            get => currentParsedFileIndex;
+            set
+            {
+                currentParsedFileIndex = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentParsedFileIndex)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Currency to which import prices will be converted. It is output currency in the exported file.
         /// </summary>
@@ -31,10 +46,13 @@ namespace ECommerceParser.Parsers.Artb2b
         public ProductParser(Currencies currency)
         {
             _currency = currency;
+            CurrentParsedFileIndex = 0;
         }
 
         public override async Task<(ExportedProductsFile productFile, ExportedProductVariantsFile productVariantsFile)> ParseProducts(ImportedFile importObject, string sourceLanguageCode)
         {
+            CurrentParsedFileIndex = 0;
+
             var products = await GetExportedProducts(importObject);
             var productsWithVariants = GetExportedProductVariants(products.OrderBy(x => x.Id));
 
@@ -150,6 +168,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 product.Tags = new Tags(tags.Select(x => new Tag(x)));
 
                 products.Add(product);
+                CurrentParsedFileIndex++;
             }
 
             return products;

@@ -102,6 +102,16 @@ namespace ECommerceParser.Controllers
         private string _currentDestinationLanguageCode;
         private Task<ExportedProductsFile> _currentTranslationTask;
         private bool _areControlsEnabled;
+        private string _currentStatusBarName;
+        private int _currentProcessedItemIndex;
+        private int _maxProcessedItemIndex;
+
+        private enum Status
+        {
+            Ready,
+            Parsing,
+            Translating
+        }
         #endregion
 
         #region AppProperties
@@ -141,11 +151,42 @@ namespace ECommerceParser.Controllers
 
         public Currencies CurrentSourceCurrency { get; set; }
         public Currencies CurrentDestinationCurrency { get; set; }
-        public bool AreControlsEnabled { 
+        public bool AreControlsEnabled
+        {
             get => _areControlsEnabled;
             set
             {
                 _areControlsEnabled = value;
+                OnPropertyChanged(MethodBase.GetCurrentMethod().Name.Substring(4));
+            }
+        }
+
+        public string CurrentStatusBarName
+        {
+            get => _currentStatusBarName;
+            set
+            {
+                _currentStatusBarName = value;
+                OnPropertyChanged(MethodBase.GetCurrentMethod().Name.Substring(4));
+            }
+        }
+
+        public int CurrentProcessedItemIndex
+        {
+            get => _currentProcessedItemIndex;
+            set
+            {
+                _currentProcessedItemIndex = value;
+                OnPropertyChanged(MethodBase.GetCurrentMethod().Name.Substring(4));
+            }
+        }
+
+        public int MaxProcessedItemIndex
+        {
+            get => _maxProcessedItemIndex;
+            set
+            {
+                _maxProcessedItemIndex = value;
                 OnPropertyChanged(MethodBase.GetCurrentMethod().Name.Substring(4));
             }
         }
@@ -158,6 +199,9 @@ namespace ECommerceParser.Controllers
             CurrentSourceCurrency = Currencies.PolishZloty;
             CurrentDestinationCurrency = Currencies.Euro;
             AreControlsEnabled = true;
+            CurrentStatusBarName = Status.Ready.ToString();
+            CurrentProcessedItemIndex = 0;
+            MaxProcessedItemIndex = 1;
         }
         #endregion
 
@@ -181,9 +225,17 @@ namespace ECommerceParser.Controllers
                     $"Please choose source language.", "Empty source language", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            CurrentStatusBarName = Status.Parsing.ToString() + "...";
 
             var importedFile = ImportedFile.Load(InputFileTextBoxValue.Split('\n'), CurrentSourceCurrency);
             var parser = new ProductParser(CurrentDestinationCurrency);
+
+            // Handle ProgressBar
+            CurrentProcessedItemIndex = importedFile.Products.Count;
+            MaxProcessedItemIndex = importedFile.Products.Count;
+            parser.PropertyChanged += OnIndexChanged;
+            // Handle ProgressBar
+
             (CurrentExportedProductsFile, CurrentExportedProductVariantsFile) = await parser.ParseProducts(importedFile, CurrentSourceLanguageCode);
             CurrentExportedProducts.Clear();
             foreach (var product in CurrentExportedProductsFile.Products)
@@ -195,6 +247,16 @@ namespace ECommerceParser.Controllers
             {
                 CurrentExportedProductVariants.Add(productVariant);
             }
+
+            parser.PropertyChanged -= OnIndexChanged;
+            CurrentStatusBarName = Status.Ready.ToString();
+        }
+
+        private void OnIndexChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var type = sender.GetType();
+            var currentIndex = type.GetProperty(e.PropertyName).GetValue(sender);
+            CurrentProcessedItemIndex = (int)currentIndex;
         }
 
         public async Task TranslateCurrentFile()
@@ -214,8 +276,9 @@ namespace ECommerceParser.Controllers
             }
 
             AreControlsEnabled = false;
+            CurrentStatusBarName = Status.Translating.ToString() + "...";
 
-            _currentTranslationTask = Translator.Translate(CurrentExportedProductsFile, LanguageCodes.English);
+            _currentTranslationTask = Translator.Translate(CurrentExportedProductsFile, CurrentDestinationLanguageCode);
             CurrentExportedProductsFile = await _currentTranslationTask;
             CurrentExportedProducts.Clear();
             foreach (var product in CurrentExportedProductsFile.Products)
@@ -223,6 +286,7 @@ namespace ECommerceParser.Controllers
                 CurrentExportedProducts.Add(product);
             }
             AreControlsEnabled = true;
+            CurrentStatusBarName = Status.Ready.ToString();
         }
 
         public void ExportFiles()
