@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -16,8 +17,27 @@ using System.Threading.Tasks;
 
 namespace ECommerceParser.Helpers
 {
-    public class Translator
+    public class Translator : INotifyPropertyChanged
     {
+        private int _currentParsedProductIndex;
+
+        public int CurrentParsedProductIndex
+        {
+            get => _currentParsedProductIndex;
+            set
+            {
+                _currentParsedProductIndex = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentParsedProductIndex)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public Translator()
+        {
+            CurrentParsedProductIndex = 0;
+        }
+
         /// <summary>
         /// Translates whole ExportedProductsFile object with products from source language to destination language.
         /// For language codes use Google.Cloud.Translation.V2.LanguageCodes helper class.
@@ -31,6 +51,7 @@ namespace ECommerceParser.Helpers
         {
             if (inputFile.FileLanguageCode == destinationLanguageCode) return inputFile;
 
+            CurrentParsedProductIndex = 0;
             var client = new HttpClient();
             var outputProducts = TranslateProducts(client, inputFile.Products, inputFile.FileLanguageCode, destinationLanguageCode);
             return new ExportedProductsFile(await outputProducts.ToListAsync(), destinationLanguageCode);
@@ -67,6 +88,7 @@ namespace ECommerceParser.Helpers
             var translatedTags = await TranslateAsync(client, inputProduct.Tags.Select(x => x.Name), sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail).ToListAsync();
             outputProduct.Tags = new Tags(translatedTags.Select(x => new Tag(x)));
 
+            CurrentParsedProductIndex++;
             return outputProduct;
         }
 

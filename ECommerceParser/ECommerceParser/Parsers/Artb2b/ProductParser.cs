@@ -19,16 +19,16 @@ namespace ECommerceParser.Parsers.Artb2b
 {
     public class ProductParser : GenericParser<ImportedFile, ExportedProductsFile, ExportedProductVariantsFile>, INotifyPropertyChanged
     {
-        private int currentParsedFileIndex;
+        private int _currentParsedProductIndex;
         private Currencies _currency;
 
-        public int CurrentParsedFileIndex
+        public int CurrentParsedProductIndex
         {
-            get => currentParsedFileIndex;
+            get => _currentParsedProductIndex;
             set
             {
-                currentParsedFileIndex = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentParsedFileIndex)));
+                _currentParsedProductIndex = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentParsedProductIndex)));
             }
         }
 
@@ -46,12 +46,12 @@ namespace ECommerceParser.Parsers.Artb2b
         public ProductParser(Currencies currency)
         {
             _currency = currency;
-            CurrentParsedFileIndex = 0;
+            CurrentParsedProductIndex = 0;
         }
 
         public override async Task<(ExportedProductsFile productFile, ExportedProductVariantsFile productVariantsFile)> ParseProducts(ImportedFile importObject, string sourceLanguageCode)
         {
-            CurrentParsedFileIndex = 0;
+            CurrentParsedProductIndex = 0;
 
             var products = await GetExportedProducts(importObject);
             var productsWithVariants = GetExportedProductVariants(products.OrderBy(x => x.Id));
@@ -168,7 +168,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 product.Tags = new Tags(tags.Select(x => new Tag(x)));
 
                 products.Add(product);
-                CurrentParsedFileIndex++;
+                CurrentParsedProductIndex++;
             }
 
             return products;

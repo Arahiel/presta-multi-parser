@@ -225,16 +225,18 @@ namespace ECommerceParser.Controllers
                     $"Please choose source language.", "Empty source language", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            CurrentStatusBarName = Status.Parsing.ToString() + "...";
 
             var importedFile = ImportedFile.Load(InputFileTextBoxValue.Split('\n'), CurrentSourceCurrency);
             var parser = new ProductParser(CurrentDestinationCurrency);
 
             // Handle ProgressBar
-            CurrentProcessedItemIndex = importedFile.Products.Count;
+            CurrentProcessedItemIndex = 0;
             MaxProcessedItemIndex = importedFile.Products.Count;
             parser.PropertyChanged += OnIndexChanged;
             // Handle ProgressBar
+
+            AreControlsEnabled = false;
+            CurrentStatusBarName = Status.Parsing.ToString() + "...";
 
             (CurrentExportedProductsFile, CurrentExportedProductVariantsFile) = await parser.ParseProducts(importedFile, CurrentSourceLanguageCode);
             CurrentExportedProducts.Clear();
@@ -248,6 +250,7 @@ namespace ECommerceParser.Controllers
                 CurrentExportedProductVariants.Add(productVariant);
             }
 
+            AreControlsEnabled = true;
             parser.PropertyChanged -= OnIndexChanged;
             CurrentStatusBarName = Status.Ready.ToString();
         }
@@ -275,18 +278,28 @@ namespace ECommerceParser.Controllers
                 return;
             }
 
+            var translator = new Translator();
+
+            // Handle ProgressBar
+            CurrentProcessedItemIndex = 0;
+            MaxProcessedItemIndex = CurrentExportedProductsFile.Products.Count;
+            translator.PropertyChanged += OnIndexChanged;
+            // Handle ProgressBar
+
             AreControlsEnabled = false;
             CurrentStatusBarName = Status.Translating.ToString() + "...";
 
-            var translator = new Translator();
             _currentTranslationTask = translator.Translate(CurrentExportedProductsFile, CurrentDestinationLanguageCode);
             CurrentExportedProductsFile = await _currentTranslationTask;
             CurrentExportedProducts.Clear();
+
             foreach (var product in CurrentExportedProductsFile.Products)
             {
                 CurrentExportedProducts.Add(product);
             }
+
             AreControlsEnabled = true;
+            translator.PropertyChanged -= OnIndexChanged;
             CurrentStatusBarName = Status.Ready.ToString();
         }
 
