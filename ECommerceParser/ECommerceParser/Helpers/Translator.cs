@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceParser.Helpers
 {
-    public static class Translator
+    public class Translator
     {
         /// <summary>
         /// Translates whole ExportedProductsFile object with products from source language to destination language.
@@ -26,28 +26,28 @@ namespace ECommerceParser.Helpers
         /// <param name="sourceLanguageCode"></param>
         /// <param name="destinationLanguageCode"></param>
         /// <returns></returns>
-        public static async Task<ExportedProductsFile> Translate(this ExportedProductsFile inputFile,
+        public async Task<ExportedProductsFile> Translate(ExportedProductsFile inputFile,
                                                                  string destinationLanguageCode)
         {
             if (inputFile.FileLanguageCode == destinationLanguageCode) return inputFile;
 
             var client = new HttpClient();
-            var outputProducts = client.TranslateProducts(inputFile.Products, inputFile.FileLanguageCode, destinationLanguageCode);
+            var outputProducts = TranslateProducts(client, inputFile.Products, inputFile.FileLanguageCode, destinationLanguageCode);
             return new ExportedProductsFile(await outputProducts.ToListAsync(), destinationLanguageCode);
         }
 
-        private static async IAsyncEnumerable<ExportedProduct> TranslateProducts(this HttpClient client,
+        private async IAsyncEnumerable<ExportedProduct> TranslateProducts(HttpClient client,
                                                                                  List<ExportedProduct> inputProducts,
                                                                                  string sourceLanguageCode,
                                                                                  string destinationLanguageCode)
         {
             foreach (var product in inputProducts)
             {
-                yield return (await client.TranslateProduct(product, sourceLanguageCode, destinationLanguageCode));
+                yield return (await TranslateProduct(client, product, sourceLanguageCode, destinationLanguageCode));
             }
         }
 
-        private static async Task<ExportedProduct> TranslateProduct(this HttpClient client,
+        private async Task<ExportedProduct> TranslateProduct(HttpClient client,
                                                                     ExportedProduct inputProduct,
                                                                     string sourceLanguageCode,
                                                                     string destinationLanguageCode)
@@ -56,31 +56,31 @@ namespace ECommerceParser.Helpers
 
 
             outputProduct.ImageUrls = inputProduct.ImageUrls;
-            outputProduct.Name = await client.TranslateAsync(inputProduct.Name, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
+            outputProduct.Name = await TranslateAsync(client, inputProduct.Name, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
 
             //Maximum byte size for translation is 500 bytes, so Description has to have <=250 characters
-            outputProduct.Description = await client.TranslateAsync(inputProduct.Description, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
+            outputProduct.Description = await TranslateAsync(client, inputProduct.Description, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
 
             //Translate each category separately for better translation match
             outputProduct.Categories = new Categories(await TranslateSeparateCategories(client, inputProduct, sourceLanguageCode, destinationLanguageCode).ToListAsync());
 
-            var translatedTags = await client.TranslateAsync(inputProduct.Tags.Select(x => x.Name), sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail).ToListAsync();
+            var translatedTags = await TranslateAsync(client, inputProduct.Tags.Select(x => x.Name), sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail).ToListAsync();
             outputProduct.Tags = new Tags(translatedTags.Select(x => new Tag(x)));
 
             return outputProduct;
         }
 
-        private static async IAsyncEnumerable<Category> TranslateSeparateCategories(HttpClient client, ExportedProduct inputProduct, string sourceLanguageCode, string destinationLanguageCode)
+        private async IAsyncEnumerable<Category> TranslateSeparateCategories(HttpClient client, ExportedProduct inputProduct, string sourceLanguageCode, string destinationLanguageCode)
         {
             foreach (var category in inputProduct.Categories)
             {
-                var translations = await client.TranslateAsync(category.ToString().Split('/'), sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail).ToListAsync();
+                var translations = await TranslateAsync(client, category.ToString().Split('/'), sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail).ToListAsync();
                 var translatedCategory = Category.FromString(string.Join("/", translations));
                 yield return translatedCategory;
             }
         }
 
-        public static async IAsyncEnumerable<string> TranslateAsync(this HttpClient client,
+        public static async IAsyncEnumerable<string> TranslateAsync(HttpClient client,
                                                                      IEnumerable<string> inputTexts,
                                                                      string sourceLanguageCode,
                                                                      string destinationLanguageCode,
@@ -92,7 +92,7 @@ namespace ECommerceParser.Helpers
             }
         }
 
-        public static async Task<string> TranslateAsync(this HttpClient client,
+        public static async Task<string> TranslateAsync(HttpClient client,
                                                          string inputText,
                                                          string sourceLanguageCode,
                                                          string destinationLanguageCode,

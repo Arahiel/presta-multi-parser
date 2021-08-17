@@ -278,7 +278,8 @@ namespace ECommerceParser.Controllers
             AreControlsEnabled = false;
             CurrentStatusBarName = Status.Translating.ToString() + "...";
 
-            _currentTranslationTask = Translator.Translate(CurrentExportedProductsFile, CurrentDestinationLanguageCode);
+            var translator = new Translator();
+            _currentTranslationTask = translator.Translate(CurrentExportedProductsFile, CurrentDestinationLanguageCode);
             CurrentExportedProductsFile = await _currentTranslationTask;
             CurrentExportedProducts.Clear();
             foreach (var product in CurrentExportedProductsFile.Products)
