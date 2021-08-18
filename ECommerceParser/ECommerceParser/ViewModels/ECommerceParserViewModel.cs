@@ -1,4 +1,5 @@
 ﻿using ECommerceParser.Helpers;
+using ECommerceParser.Interfaces;
 using ECommerceParser.Model.Artb2b;
 using ECommerceParser.Model.Common;
 using ECommerceParser.Model.Prestashop;
@@ -8,6 +9,7 @@ using Google.Cloud.Translation.V2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -105,6 +107,8 @@ namespace ECommerceParser.Controllers
         private string _currentStatusBarName;
         private int _currentProcessedItemIndex;
         private int _maxProcessedItemIndex;
+        public string _oldFileLanguageCode;
+        public string _oldTranslation;
 
         private enum Status
         {
@@ -127,7 +131,7 @@ namespace ECommerceParser.Controllers
 
         public ExportedProductsFile CurrentExportedProductsFile { get; set; }
         public ExportedProductVariantsFile CurrentExportedProductVariantsFile { get; set; }
-        public ObservableCollection<ExportedProduct> CurrentExportedProducts { get; set; } = new ObservableCollection<ExportedProduct>();
+        public ObservableCollection<INotifyPropertyChanges> CurrentExportedProducts { get; set; } = new ObservableCollection<INotifyPropertyChanges>();
         public ObservableCollection<ExportedProductVariant> CurrentExportedProductVariants { get; set; } = new ObservableCollection<ExportedProductVariant>();
         public List<string> LanguageCodeList { get; }
         public string CurrentSourceLanguageCode
@@ -202,10 +206,79 @@ namespace ECommerceParser.Controllers
             CurrentStatusBarName = Status.Ready.ToString();
             CurrentProcessedItemIndex = 0;
             MaxProcessedItemIndex = 1;
+            CurrentExportedProducts.CollectionChanged += OnCurrentProductsUpdated;
         }
+
         #endregion
 
         #region AppMethods
+        private void OnCurrentProductsUpdated(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (ExportedProduct item in e.OldItems)
+                {
+                    item.PropertyChanging -= SimpleProperty_PropertyChanging;
+                    item.PropertyChanged -= SimpleProperty_PropertyChanged;
+                    item.Categories.CategoryChanging -= Category_PropertyChanging;
+                    item.Categories.CategoryChanged -= Category_PropertyChanged;
+                    item.Tags.TagChanging -= Tag_PropertyChanging;
+                    item.Tags.TagChanged -= Tag_PropertyChanged;
+                }
+            }
+            if (e.NewItems != null)
+            {
+                foreach (ExportedProduct item in e.NewItems)
+                {
+                    item.PropertyChanging += SimpleProperty_PropertyChanging;
+                    item.PropertyChanged += SimpleProperty_PropertyChanged;
+                    item.Categories.CategoryChanging += Category_PropertyChanging;
+                    item.Categories.CategoryChanged += Category_PropertyChanged;
+                    item.Tags.TagChanging += Tag_PropertyChanging;
+                    item.Tags.TagChanged += Tag_PropertyChanged;
+                }
+            }
+        }
+
+        private void SimpleProperty_PropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            if (!(sender is ExportedProduct o) || _oldFileLanguageCode == null) return;
+            _oldTranslation = typeof(ExportedProduct).GetProperty(e.PropertyName).GetValue(o).ToString();
+        }
+
+        private void SimpleProperty_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!(sender is ExportedProduct o) || _oldFileLanguageCode == null) return;
+            var newValue = typeof(ExportedProduct).GetProperty(e.PropertyName).GetValue(o).ToString();
+            Translator.UpdateTranslation(_oldTranslation, _oldFileLanguageCode, newValue, CurrentDestinationLanguageCode);
+        }
+
+        private void Category_PropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            if (!(sender is Category o) || _oldFileLanguageCode == null) return;
+            _oldTranslation = typeof(Category).GetProperty(e.PropertyName).GetValue(o).ToString();
+        }
+
+        private void Category_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!(sender is Category o) || _oldFileLanguageCode == null) return;
+            var newValue = typeof(Category).GetProperty(e.PropertyName).GetValue(o).ToString();
+            Translator.UpdateTranslation(_oldTranslation, _oldFileLanguageCode, newValue, CurrentDestinationLanguageCode);
+        }
+
+        private void Tag_PropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            if (!(sender is Tag o) || _oldFileLanguageCode == null) return;
+            _oldTranslation = typeof(Tag).GetProperty(e.PropertyName).GetValue(o).ToString();
+        }
+
+        private void Tag_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!(sender is Tag o) || _oldFileLanguageCode == null) return;
+            var newValue = typeof(Tag).GetProperty(e.PropertyName).GetValue(o).ToString();
+            Translator.UpdateTranslation(_oldTranslation, _oldFileLanguageCode, newValue, CurrentDestinationLanguageCode);
+        }
+
         public void ImportFile()
         {
             InputFileTextBoxValue = FileHelper.ReadFileDialog();
@@ -289,8 +362,10 @@ namespace ECommerceParser.Controllers
             AreControlsEnabled = false;
             CurrentStatusBarName = Status.Translating.ToString() + "...";
 
+            _oldFileLanguageCode = CurrentExportedProductsFile.FileLanguageCode;
             _currentTranslationTask = translator.Translate(CurrentExportedProductsFile, CurrentDestinationLanguageCode);
             CurrentExportedProductsFile = await _currentTranslationTask;
+
             CurrentExportedProducts.Clear();
 
             foreach (var product in CurrentExportedProductsFile.Products)

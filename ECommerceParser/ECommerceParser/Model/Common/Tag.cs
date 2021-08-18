@@ -1,14 +1,27 @@
-﻿using System;
+﻿using ECommerceParser.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ECommerceParser.Model.Common
 {
-    public class Tag
+    public class Tag : INotifyPropertyChanges
     {
-        public string Name { get; set; }
+        private string _name;
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(Name)));
+                _name = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+            }
+        }
 
         public Tag(string name)
         {
@@ -17,5 +30,8 @@ namespace ECommerceParser.Model.Common
             var rest = input.Substring(1);
             Name = firstUpperLetter + rest;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangingEventHandler PropertyChanging;
     }
 }

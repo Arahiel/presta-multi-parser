@@ -165,7 +165,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 product.Description = importedProduct.Description;
                 product.Categories = categories;
                 product.ImageUrls = imageUrls;
-                product.Tags = new Tags(tags.Select(x => new Tag(x)));
+                product.Tags = Tags.FromListWithUpdatedHandler(tags.Select(x => new Tag(x)).ToList());
 
                 products.Add(product);
                 CurrentParsedProductIndex++;

@@ -140,6 +140,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\INotifyPropertyChanges.cs" />
     <Compile Include="Model\Common\ImageUrl.cs" />
     <Compile Include="ViewModels\ECommerceParserViewModel.cs" />
     <Compile Include="Helpers\Enums\Artb2b\ImportHeaders.cs" />

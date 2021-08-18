@@ -83,10 +83,10 @@ namespace ECommerceParser.Helpers
             outputProduct.Description = await TranslateAsync(client, inputProduct.Description, sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail);
 
             //Translate each category separately for better translation match
-            outputProduct.Categories = new Categories(await TranslateSeparateCategories(client, inputProduct, sourceLanguageCode, destinationLanguageCode).ToListAsync());
+            outputProduct.Categories = Categories.FromListWithUpdatedHandler(await TranslateSeparateCategories(client, inputProduct, sourceLanguageCode, destinationLanguageCode).ToListAsync());
 
             var translatedTags = await TranslateAsync(client, inputProduct.Tags.Select(x => x.Name), sourceLanguageCode, destinationLanguageCode, Constants.TranslatorMail).ToListAsync();
-            outputProduct.Tags = new Tags(translatedTags.Select(x => new Tag(x)));
+            outputProduct.Tags = Tags.FromListWithUpdatedHandler(translatedTags.Select(x => new Tag(x)).ToList());
 
             CurrentParsedProductIndex++;
             return outputProduct;
@@ -158,7 +158,7 @@ namespace ECommerceParser.Helpers
             return translatedText;
         }
 
-        private static Cache CacheTranslation(string inputText, string sourceLanguageCode, string translatedText, string destinationLanguageCode)
+        public static Cache CacheTranslation(string inputText, string sourceLanguageCode, string translatedText, string destinationLanguageCode)
         {
             var translationFilePath = GetTranslationsFilePath();
             var translationFileContents = File.ReadAllBytes(translationFilePath);
@@ -180,7 +180,25 @@ namespace ECommerceParser.Helpers
             return newCachedText;
         }
 
-        private static string GetCachedTranslation(string inputText, string sourceLanguageCode, string destinationLanguageCode)
+        public static Cache UpdateTranslation(string oldText, string sourceLanguageCode, string newText, string destinationLanguageCode)
+        {
+            var translationFilePath = GetTranslationsFilePath();
+            var translationFileContents = File.ReadAllBytes(translationFilePath);
+            var translation = Translation.FromJson(Encoding.UTF8.GetString(translationFileContents));
+
+            var cachedTranslation = translation.Cache.Single(x =>
+            x.OutputText.Equals(oldText) &&
+            x.SourceLanguage.Equals(sourceLanguageCode) &&
+            x.DestinationLanguage.Equals(destinationLanguageCode));
+
+            cachedTranslation.OutputText = newText;
+
+            var serializedTranslation = Translation.ToJson(translation);
+            File.WriteAllBytes(translationFilePath, Encoding.UTF8.GetBytes(serializedTranslation));
+            return cachedTranslation;
+        }
+
+        public static string GetCachedTranslation(string inputText, string sourceLanguageCode, string destinationLanguageCode)
         {
             var translationFilePath = GetTranslationsFilePath();
             var translationFileContents = File.ReadAllBytes(translationFilePath);
