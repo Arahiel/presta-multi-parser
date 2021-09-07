@@ -109,6 +109,7 @@ namespace ECommerceParser.Controllers
         private int _maxProcessedItemIndex;
         public string _oldFileLanguageCode;
         public string _oldTranslation;
+        private int _startingId;
 
         private enum Status
         {
@@ -194,6 +195,19 @@ namespace ECommerceParser.Controllers
                 OnPropertyChanged(MethodBase.GetCurrentMethod().Name.Substring(4));
             }
         }
+
+        /// <summary>
+        /// ID from which parsed products will start
+        /// </summary>
+        public int StartingId
+        {
+            get => _startingId;
+            set
+            {
+                _startingId = value;
+                OnPropertyChanged(MethodBase.GetCurrentMethod().Name.Substring(4));
+            }
+        }
         #endregion
 
         #region Constructors
@@ -207,6 +221,7 @@ namespace ECommerceParser.Controllers
             CurrentProcessedItemIndex = 0;
             MaxProcessedItemIndex = 1;
             CurrentExportedProducts.CollectionChanged += OnCurrentProductsUpdated;
+            _startingId = 1;
         }
 
         #endregion
@@ -300,7 +315,17 @@ namespace ECommerceParser.Controllers
             }
 
             var importedFile = ImportedFile.Load(InputFileTextBoxValue.Split('\n'), CurrentSourceCurrency);
-            var parser = new ProductParser(CurrentDestinationCurrency);
+
+            ProductParser parser;
+            try
+            {
+                parser = new ProductParser(CurrentDestinationCurrency, StartingId);
+            }
+            catch (ArgumentException e)
+            {
+                MessageBox.Show(e.Message, "Incorrect starting ID", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             // Handle ProgressBar
             CurrentProcessedItemIndex = 0;

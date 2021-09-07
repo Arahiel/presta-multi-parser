@@ -119,8 +119,8 @@
             </DataGrid>
         </Grid>
 
-        <Button Command="{Binding ImportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Import file" Margin="253,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="125"/>
-        <Button Command="{Binding ExportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Export file" HorizontalAlignment="Left" Margin="383,19,0,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" FontSize="18"/>
+        <Button Command="{Binding ImportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Import file" Margin="372,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="125"/>
+        <Button Command="{Binding ExportFileCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Export file" HorizontalAlignment="Left" Margin="502,19,0,0" Grid.Row="0" VerticalAlignment="Top" Width="125" Height="35" FontSize="18"/>
         <Button Command="{Binding ParseProductsCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}"  Content="Parse products" Margin="342.333,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" Grid.Column="1" FontSize="18" HorizontalAlignment="Left" Width="125"/>
         <StackPanel x:Name="StatusBar" Margin="0" Grid.Row="2" Background="#FFE5E5E5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left">
             <Label Content="{Binding CurrentStatusBarName}" Width="100" Height="25" VerticalAlignment="Center"/>
@@ -135,6 +135,8 @@
         <Label Content="Destination currency" HorizontalAlignment="Left" Margin="166.333,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
         <ComboBox x:Name="destinationCurrency" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding Source={StaticResource currencyData}}" SelectedItem="{Binding CurrentDestinationCurrency}" HorizontalAlignment="Left" Margin="166.333,41,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
         <Button Command="{Binding TranslateCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Translate" Margin="472.333,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" Grid.Column="1" FontSize="18" HorizontalAlignment="Left" Width="125"/>
+        <Label Content="Starting ID" HorizontalAlignment="Left" Margin="253,11,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="21" Margin="253,44,0,0" TextWrapping="Wrap" Text="{Binding StartingId, Mode=TwoWay}" VerticalAlignment="Top" Width="83"/>
     </Grid>
 
 </Window>

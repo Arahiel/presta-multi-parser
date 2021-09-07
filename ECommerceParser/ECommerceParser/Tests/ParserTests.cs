@@ -23,7 +23,7 @@ namespace ECommerceParser.Tests
             var exportedProductFileContents = Resources.artb2b_20210717_103921_products_en;
             var exportedProductVariantsFileContents = Resources.artb2b_20210717_103921_combinations_en;
 
-            var parser = new ProductParser(EuropeanCentralBank.ExchangeRates.Currencies.Euro);
+            var parser = new ProductParser(EuropeanCentralBank.ExchangeRates.Currencies.Euro, 1);
             var (outputProductFile, outputProductVariantsFile) = await parser.ParseProducts(importedFile, LanguageCodes.Polish);
 
             var translator = new Translator();

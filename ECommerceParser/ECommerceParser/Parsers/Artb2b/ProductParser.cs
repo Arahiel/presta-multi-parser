@@ -21,6 +21,7 @@ namespace ECommerceParser.Parsers.Artb2b
     {
         private int _currentParsedProductIndex;
         private Currencies _currency;
+        private int _startingId;
 
         public int CurrentParsedProductIndex
         {
@@ -43,10 +44,15 @@ namespace ECommerceParser.Parsers.Artb2b
         /// Parameter is the currency to which import prices will be converted. It is output currency in the exported file.
         /// </summary>
         /// <param name="currency"></param>
-        public ProductParser(Currencies currency)
+        public ProductParser(Currencies currency, int startingId)
         {
             _currency = currency;
             CurrentParsedProductIndex = 0;
+            if (startingId < 1)
+            {
+                throw new ArgumentException("Starting ID must be greater than zero!");
+            }
+            _startingId = startingId - 1;
         }
 
         public override async Task<(ExportedProductsFile productFile, ExportedProductVariantsFile productVariantsFile)> ParseProducts(ImportedFile importObject, string sourceLanguageCode)
@@ -94,6 +100,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 lastId = product.Id;
             }
 
+            //Filter output products to contain only Default ones from Variants
             var outProducts = products.Where(x => x.Reference.Equals(productVariants.Single(y => y.Id == x.Id && y.Default).Reference));
             outProducts.ForEach(x => x.Variants = productVariants.Where(y => y.Id == x.Id).ToList());
             return outProducts.ToList();
@@ -102,8 +109,10 @@ namespace ECommerceParser.Parsers.Artb2b
         private async Task<List<ExportedProduct>> GetExportedProducts(ImportedFile importObject)
         {
             var products = new List<ExportedProduct>();
+            var outputId = _startingId;
+            var lastId = -1;
 
-            foreach (var importedProduct in importObject.Products)
+            foreach (var importedProduct in importObject.Products.OrderBy(x => x.Code))
             {
                 //Features
                 var splittedFeatures = importedProduct.Features.Split('|');
@@ -125,6 +134,13 @@ namespace ECommerceParser.Parsers.Artb2b
                  });
 
                 var id = int.Parse(featureDict["Źródło"]);
+
+                if (id != lastId)
+                {
+                    outputId++;
+                }
+
+                lastId = id;
 
                 //Categories
                 var cb = new CategoryBuilder();
@@ -160,7 +176,7 @@ namespace ECommerceParser.Parsers.Artb2b
                 //Tax rule
                 var taxRule = Constants.WallpicsTaxRules[importedProduct.Tax];
 
-                var product = new ExportedProduct(id, importedProduct.Code, finalPriceWithTax, taxRule, convertedPurchasePrice, featureDict);
+                var product = new ExportedProduct(outputId, importedProduct.Code, finalPriceWithTax, taxRule, convertedPurchasePrice, featureDict);
                 product.Name = importedProduct.Name;
                 product.Description = importedProduct.Description;
                 product.Categories = categories;
