@@ -54,7 +54,7 @@ namespace ECommerceParser.Helpers
         [JsonProperty("target")]
         public string Target { get; set; }
 
-        [JsonProperty("quality")]
+        [JsonProperty("quality", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(DecodingChoiceConverter))]
         public long Quality { get; set; }
 
