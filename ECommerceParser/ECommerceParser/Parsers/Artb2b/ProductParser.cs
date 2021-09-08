@@ -87,12 +87,17 @@ namespace ECommerceParser.Parsers.Artb2b
                 }
 
                 const string inputLayoutAttributeName = "Układ";
+                const string widthAttributeName = "Szerokość [cm]";
+                const string heightAttributeName = "Wysokość [cm]";
+                const string elementNumberAttributeName = "Liczba elementów";
                 const string outputLayoutAttributeName = "Layout";
                 const uint layoutPosition = 0;
 
+
                 var attributes = new Attributes()
                 {
-                    new Model.Prestashop.Attribute(outputLayoutAttributeName, AttributeType.Select, layoutPosition, new AttributeValue(layoutPosition, product.Features[inputLayoutAttributeName]))
+                    new Model.Prestashop.Attribute(outputLayoutAttributeName, AttributeType.Select, layoutPosition, 
+                        new AttributeValue(layoutPosition, $"{product.Features[inputLayoutAttributeName]} {product.Features[widthAttributeName]}x{product.Features[heightAttributeName]} {product.Features[elementNumberAttributeName]} pcs"))
                 };
 
                 const int quantity = 0; // Add empty stock by default
