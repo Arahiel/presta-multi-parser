@@ -136,7 +136,7 @@
         <ComboBox x:Name="destinationCurrency" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" ItemsSource="{Binding Source={StaticResource currencyData}}" SelectedItem="{Binding CurrentDestinationCurrency}" HorizontalAlignment="Left" Margin="166.333,41,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
         <Button Command="{Binding TranslateCommand}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" Content="Translate" Margin="472.333,19,0,0" Grid.Row="0" VerticalAlignment="Top" Height="35" Grid.Column="1" FontSize="18" HorizontalAlignment="Left" Width="125"/>
         <Label Content="Starting ID" HorizontalAlignment="Left" Margin="253,11,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="21" Margin="253,44,0,0" TextWrapping="Wrap" Text="{Binding StartingId, Mode=TwoWay}" VerticalAlignment="Top" Width="83"/>
+        <TextBox HorizontalAlignment="Left" Height="21" Margin="253,44,0,0" TextWrapping="Wrap" Text="{Binding StartingId, Mode=TwoWay}" IsEnabled="{Binding AreControlsEnabled, Mode=OneWay}" VerticalAlignment="Top" Width="83"/>
     </Grid>
 
 </Window>

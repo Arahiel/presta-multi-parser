@@ -72,6 +72,13 @@ namespace ECommerceParser.Parsers.Artb2b
             var lastId = -1;
             var defaultPrice = 0d;
 
+            const string inputLayoutAttributeName = "Układ";
+            const string widthAttributeName = "Szerokość [cm]";
+            const string heightAttributeName = "Wysokość [cm]";
+            const string elementNumberAttributeName = "Liczba elementów";
+            const string outputLayoutAttributeName = "Layout";
+            const uint layoutPosition = 0;
+
             foreach (var product in products)
             {
                 var isDefault = product.Id != lastId;
@@ -86,18 +93,12 @@ namespace ECommerceParser.Parsers.Artb2b
                     impactOnPrice = product.PriceTaxIncluded - defaultPrice;
                 }
 
-                const string inputLayoutAttributeName = "Układ";
-                const string widthAttributeName = "Szerokość [cm]";
-                const string heightAttributeName = "Wysokość [cm]";
-                const string elementNumberAttributeName = "Liczba elementów";
-                const string outputLayoutAttributeName = "Layout";
-                const uint layoutPosition = 0;
 
-
+                var referenceVariant = Regex.Match(product.Reference, @"(.)_.").Groups[1].Value;
                 var attributes = new Attributes()
                 {
-                    new Model.Prestashop.Attribute(outputLayoutAttributeName, AttributeType.Select, layoutPosition, 
-                        new AttributeValue(layoutPosition, $"{product.Features[inputLayoutAttributeName]} {product.Features[widthAttributeName]}x{product.Features[heightAttributeName]} {product.Features[elementNumberAttributeName]} pcs"))
+                    new Model.Prestashop.Attribute(outputLayoutAttributeName, AttributeType.Select, layoutPosition,
+                        new AttributeValue(layoutPosition, $"{ product.Features[inputLayoutAttributeName]}{referenceVariant} {product.Features[widthAttributeName]}x{product.Features[heightAttributeName]} {product.Features[elementNumberAttributeName]} pcs"))
                 };
 
                 const int quantity = 0; // Add empty stock by default
@@ -107,7 +108,9 @@ namespace ECommerceParser.Parsers.Artb2b
 
             //Filter output products to contain only Default ones from Variants
             var outProducts = products.Where(x => x.Reference.Equals(productVariants.Single(y => y.Id == x.Id && y.Default).Reference));
-            outProducts.ForEach(x => x.Variants = productVariants.Where(y => y.Id == x.Id).ToList());
+            outProducts.ForEach(x => x.Variants = productVariants.Where(y => y.Id == x.Id)
+            .OrderBy(x => x.Attributes.Single(y => y.Name.Equals(outputLayoutAttributeName)).AttributeValue.Value)
+            .ToList());
             return outProducts.ToList();
         }
 
