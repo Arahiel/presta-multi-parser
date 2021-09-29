@@ -58,7 +58,6 @@ namespace ECommerceParser.Parsers.Artb2b
         public override async Task<(ExportedProductsFile productFile, ExportedProductVariantsFile productVariantsFile)> ParseProducts(ImportedFile importObject, string sourceLanguageCode)
         {
             CurrentParsedProductIndex = 0;
-
             var products = await GetExportedProducts(importObject);
             var productsWithVariants = GetExportedProductVariants(products.OrderBy(x => x.Id));
 
@@ -95,10 +94,16 @@ namespace ECommerceParser.Parsers.Artb2b
 
 
                 var referenceVariant = Regex.Match(product.Reference, @"(.)_.").Groups[1].Value;
+                var numberOfElementsString = "";
+                if(product.Features.ContainsKey(elementNumberAttributeName))
+                {
+                    numberOfElementsString = $" {product.Features[elementNumberAttributeName]} pcs";
+                }
+
                 var attributes = new Attributes()
                 {
                     new Model.Prestashop.Attribute(outputLayoutAttributeName, AttributeType.Select, layoutPosition,
-                        new AttributeValue(layoutPosition, $"{ product.Features[inputLayoutAttributeName]}{referenceVariant} {product.Features[widthAttributeName]}x{product.Features[heightAttributeName]} {product.Features[elementNumberAttributeName]} pcs"))
+                        new AttributeValue(layoutPosition, $"{product.Features[inputLayoutAttributeName]}{referenceVariant} {product.Features[widthAttributeName]}x{product.Features[heightAttributeName]}{numberOfElementsString}"))
                 };
 
                 const int quantity = 0; // Add empty stock by default
